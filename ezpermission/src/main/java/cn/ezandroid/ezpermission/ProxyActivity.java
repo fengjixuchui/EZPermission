@@ -24,7 +24,7 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public final class ProxyActivity extends Activity {
 
-    private static final String KEY_PERMISSION = "KEY_PERMISSIONS";
+    private static final String KEY_PERMISSION = "KEY_PERMISSION";
 
     public static PermissionCallback sPermissionCallback;
 

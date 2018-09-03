@@ -63,6 +63,15 @@ public class EZPermission {
          * 申请权限
          *
          * @param context
+         */
+        public void apply(final Context context) {
+            apply(context, null);
+        }
+
+        /**
+         * 申请权限
+         *
+         * @param context
          * @param callback
          */
         public void apply(final Context context, final PermissionCallback callback) {
