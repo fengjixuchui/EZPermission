@@ -1,6 +1,7 @@
 package cn.ezandroid.ezpermission.demo;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v13.app.ActivityCompat;
 import android.util.Log;
@@ -43,13 +44,18 @@ public class MainActivity extends BaseActivity {
 
                             @Override
                             public void onPermissionDenied(Permission deniedPermission, boolean isNoLongerPrompted) {
-                                Log.e("MainActivity", "onPermissionDenied:" + deniedPermission
+                                Log.e("MainActivity", "onPermissionDenied a:" + deniedPermission
                                         + " " + deniedPermission.available(MainActivity.this) + " " + isNoLongerPrompted);
                             }
 
                             @Override
                             public void onAllPermissionsGranted() {
                                 Log.e("MainActivity", "onAllPermissionsGranted");
+                            }
+
+                            @Override
+                            public void onStartSetting(Context context) {
+                                Log.e("MainActivity", "onStartSetting");
                             }
                         });
             }

@@ -1,10 +1,7 @@
 package cn.ezandroid.ezpermission;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,26 +116,13 @@ public class EZPermission {
                     if (mGrantedCount == mPermissionGroups.length) {
                         onAllPermissionsGranted();
                     } else if (startSetting) {
-                        startSetting();
+                        if (callback != null) {
+                            callback.onStartSetting(context);
+                        }
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         ProxyActivity.sPermissionCallback = null; // 防止内存泄漏
-                    }
-                }
-
-                /**
-                 * 跳转到应用设置页
-                 */
-                private void startSetting() {
-                    try {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.setData(Uri.parse("package:" + context.getPackageName()));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 非Activity的Context必须加此参数
-                        context.startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        // try住异常，以防找不到应用设置页的情况
                     }
                 }
             };
