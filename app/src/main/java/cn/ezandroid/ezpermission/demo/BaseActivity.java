@@ -1,8 +1,9 @@
 package cn.ezandroid.ezpermission.demo;
 
-import android.support.annotation.IdRes;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.annotation.IdRes;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * BaseActivity
@@ -10,7 +11,7 @@ import android.view.View;
  * @author like
  * @date 2017-09-15
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public <T extends View> T $(@IdRes int resId) {
         return (T) findViewById(resId);

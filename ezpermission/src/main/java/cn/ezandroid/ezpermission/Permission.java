@@ -4,7 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,13 +45,24 @@ public class Permission implements Serializable {
             Manifest.permission.READ_SMS,
             Manifest.permission.RECEIVE_WAP_PUSH,
             Manifest.permission.RECEIVE_MMS};
-    public static String[] STORAGE = new String[]{"android.permission.READ_EXTERNAL_STORAGE", // Manifest.permission.READ_EXTERNAL_STORAGE api>=16
-            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    public static final String[] STORAGE = getStoragePermissionCompat();
 
     private String[] mPermissions;
 
     public Permission(String... permission) {
         this.mPermissions = permission;
+    }
+
+    private static String[] getStoragePermissionCompat() {
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+//            return new String[]{
+//                    "android.permission.READ_MEDIA_AUDIO",  // Manifest.permission.READ_MEDIA_AUDIO api>=29
+//                    "android.permission.READ_MEDIA_IMAGES",  // Manifest.permission.READ_MEDIA_IMAGES api>=29
+//                    "android.permission.READ_MEDIA_VIDEO"};  // Manifest.permission.READ_MEDIA_VIDEO api>=29
+//        } else {
+        return new String[]{"android.permission.READ_EXTERNAL_STORAGE", // Manifest.permission.READ_EXTERNAL_STORAGE api>=16
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//        }
     }
 
     public String[] getPermissions() {
