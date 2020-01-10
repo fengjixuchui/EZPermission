@@ -45,7 +45,7 @@ public class EZSAF {
                     callback.onSAFDenied(file);
                 }
             };
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || canWrite(context)) {
                 globalCallback.onSAFGranted(mFile);
             } else {
                 SAFProxyActivity.launch(context, mFile, globalCallback);
