@@ -122,7 +122,7 @@ public class EZPermission {
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        ProxyActivity.sPermissionCallback = null; // 防止内存泄漏
+                        PermissionProxyActivity.sPermissionCallback = null; // 防止内存泄漏
                     }
                 }
             };

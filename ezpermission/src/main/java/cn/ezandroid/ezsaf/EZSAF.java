@@ -48,7 +48,7 @@ public class EZSAF {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 globalCallback.onSAFGranted(mFile);
             } else {
-                ProxyActivity.launch(context, mFile, globalCallback);
+                SAFProxyActivity.launch(context, mFile, globalCallback);
             }
         }
     }

@@ -23,7 +23,7 @@ import java.util.List;
  * @date 2017-09-28
  */
 @RequiresApi(api = Build.VERSION_CODES.M)
-public final class ProxyActivity extends Activity {
+public final class PermissionProxyActivity extends Activity {
 
     private static final String KEY_PERMISSION = "KEY_PERMISSION";
 
@@ -32,8 +32,8 @@ public final class ProxyActivity extends Activity {
     private Permission mPermission;
 
     public static void launch(Context context, Permission permission, PermissionCallback permissionCallback) {
-        Intent intent = new Intent(context, ProxyActivity.class);
-        intent.putExtra(ProxyActivity.KEY_PERMISSION, permission);
+        Intent intent = new Intent(context, PermissionProxyActivity.class);
+        intent.putExtra(PermissionProxyActivity.KEY_PERMISSION, permission);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         sPermissionCallback = permissionCallback;
         context.startActivity(intent);

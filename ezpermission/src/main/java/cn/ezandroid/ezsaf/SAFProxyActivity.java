@@ -18,7 +18,7 @@ import java.io.File;
  * @date 2020-01-10
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public final class ProxyActivity extends Activity {
+public final class SAFProxyActivity extends Activity {
 
     private static final String KEY_FILE = "KEY_FILE";
 
@@ -27,7 +27,7 @@ public final class ProxyActivity extends Activity {
     private File mFile;
 
     public static void launch(Context context, File file, SAFCallback safCallback) {
-        Intent intent = new Intent(context, ProxyActivity.class);
+        Intent intent = new Intent(context, SAFProxyActivity.class);
         intent.putExtra(KEY_FILE, file.getAbsolutePath());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mSAFCallback = safCallback;

@@ -1,1 +1,1 @@
-include ':app', ':ezpermission', ':ezsaf'
+include ':app', ':ezpermission'

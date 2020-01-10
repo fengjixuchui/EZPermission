@@ -37,5 +37,4 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     implementation project(':ezpermission')
-    implementation project(':ezsaf')
 }

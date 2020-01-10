@@ -3,7 +3,12 @@
 
     <application>
         <activity
-            android:name=".ProxyActivity"
+            android:name="cn.ezandroid.ezpermission.PermissionProxyActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/EZPermission.ProxyActivity" />
+        <activity
+            android:name="cn.ezandroid.ezsaf.SAFProxyActivity"
             android:exported="false"
             android:label=""
             android:theme="@style/EZPermission.ProxyActivity" />

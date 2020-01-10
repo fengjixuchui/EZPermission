@@ -97,7 +97,7 @@ public class Permission implements Serializable {
         } else {
             String[] deniedPermissions = getDeniedPermissions(context, mPermissions);
             if (deniedPermissions.length > 0) {
-                ProxyActivity.launch(context, this, callback);
+                PermissionProxyActivity.launch(context, this, callback);
             } else {
                 if (callback != null) {
                     callback.onPermissionGranted(this);
