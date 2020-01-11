@@ -65,19 +65,17 @@ public class MainActivity extends BaseActivity {
             File file = new File("/storage/0123-4567/saftest.sgf");
             boolean canWrite = EZSAF.document(file).canWrite(this);
             Log.e("MainActivity", "canWrite:" + canWrite);
-            if (!canWrite) {
-                EZSAF.document(file).apply(this, new SAFCallback() {
-                    @Override
-                    public void onSAFGranted(File file) {
-                        Log.e("MainActivity", "onSAFGranted");
-                    }
+            EZSAF.document(file).apply(this, new SAFCallback() {
+                @Override
+                public void onSAFGranted(File file) {
+                    Log.e("MainActivity", "onSAFGranted");
+                }
 
-                    @Override
-                    public void onSAFDenied(File file) {
-                        Log.e("MainActivity", "onSAFDenied");
-                    }
-                });
-            }
+                @Override
+                public void onSAFDenied(File file) {
+                    Log.e("MainActivity", "onSAFDenied");
+                }
+            });
         }
     }
 }

@@ -1,15 +1,21 @@
 package cn.ezandroid.ezsaf;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
+
+import cn.ezandroid.ezpermission.R;
 
 /**
  * 代理Activity
@@ -48,7 +54,23 @@ public final class SAFProxyActivity extends Activity {
 
         mFile = new File(path);
 
-        startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 1);
+        Html.ImageGetter imgGetter = source -> {
+            int id = Integer.parseInt(source);
+            Drawable drawable = getResources().getDrawable(id);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            return drawable;
+        };
+        String message = getString(R.string.saf_message, SAFUtil.getSecondStorageFolder(mFile, this)) + "\n<img src='" + R.drawable.saf_step + "'/>";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.saf_tip);
+        builder.setMessage(Html.fromHtml(message, imgGetter, null));
+        builder.setPositiveButton(R.string.saf_choose, (dialog, which) -> startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 1));
+        builder.setNegativeButton(R.string.saf_cancel, (dialog, which) -> mSAFCallback.onSAFDenied(mFile));
+        Dialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     @Override

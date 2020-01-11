@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="saf_tip">提示</string>
+    <string name="saf_message">请选择外置存储卡根目录(%s)授权本应用进行文件操作</string>
+    <string name="saf_choose">选择</string>
+    <string name="saf_cancel">取消</string>
+</resources>
