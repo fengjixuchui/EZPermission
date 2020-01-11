@@ -98,7 +98,7 @@ public class SAFUtil {
                     if ((i < parts.length - 1) || isDirectory) {
                         nextDocument = document.createDirectory(parts[i]);
                     } else {
-                        nextDocument = document.createFile("text/plain", parts[i]);
+                        nextDocument = document.createFile("", parts[i]);
                     }
                 }
                 document = nextDocument;

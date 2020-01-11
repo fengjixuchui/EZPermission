@@ -8,11 +8,14 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import cn.ezandroid.ezpermission.EZPermission;
 import cn.ezandroid.ezpermission.Permission;
 import cn.ezandroid.ezsaf.EZSAF;
 import cn.ezandroid.ezsaf.SAFCallback;
+import cn.ezandroid.ezsaf.SAFUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -62,13 +65,23 @@ public class MainActivity extends BaseActivity {
 
     private void testSAF() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            File file = new File("/storage/0123-4567/saftest.sgf");
+            File file = new File("/storage/0123-4567/saftest3.sgf");
             boolean canWrite = EZSAF.document(file).canWrite(this);
             Log.e("MainActivity", "canWrite:" + canWrite);
             EZSAF.document(file).apply(this, new SAFCallback() {
                 @Override
                 public void onSAFGranted(File file) {
                     Log.e("MainActivity", "onSAFGranted");
+                    OutputStream outputStream = SAFUtil.getOutputStream(MainActivity.this, file);
+                    String content = "哈哈哈";
+                    byte[] data = content.getBytes();
+                    try {
+                        outputStream.write(data, 0, data.length);
+                        outputStream.flush();
+                        outputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
