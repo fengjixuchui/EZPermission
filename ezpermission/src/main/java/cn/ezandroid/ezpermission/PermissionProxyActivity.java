@@ -59,17 +59,19 @@ public final class PermissionProxyActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        List<String> grantedList = new ArrayList<>();
         List<String> deniedList = new ArrayList<>();
         for (int i = 0; i < permissions.length; i++) {
             if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                 deniedList.add(permissions[i]);
+            } else {
+                grantedList.add(permissions[i]);
             }
         }
-        if (deniedList.isEmpty()) {
-            if (sPermissionCallback != null) {
-                sPermissionCallback.onPermissionGranted(mPermission);
-            }
-        } else {
+        if (sPermissionCallback != null && !grantedList.isEmpty()) {
+            sPermissionCallback.onPermissionGranted(grantedList.toArray(new String[0]));
+        }
+        if (sPermissionCallback != null && !deniedList.isEmpty()) {
             boolean isNoLongerPrompted = false;
             for (String p : mPermission.getPermissions()) {
                 boolean rationale = shouldShowRequestPermissionRationale(p);
@@ -78,9 +80,7 @@ public final class PermissionProxyActivity extends Activity {
                     break;
                 }
             }
-            if (sPermissionCallback != null) {
-                sPermissionCallback.onPermissionDenied(mPermission, isNoLongerPrompted);
-            }
+            sPermissionCallback.onPermissionDenied(deniedList.toArray(new String[0]), isNoLongerPrompted);
         }
         finish();
     }

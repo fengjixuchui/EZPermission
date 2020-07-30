@@ -1,21 +1,25 @@
 package cn.ezandroid.ezpermission.demo;
 
 import android.Manifest;
-import android.os.Build;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.util.Arrays;
 
 import cn.ezandroid.ezpermission.EZPermission;
 import cn.ezandroid.ezpermission.Permission;
-import cn.ezandroid.ezsaf.EZSAF;
-import cn.ezandroid.ezsaf.SAFCallback;
-import cn.ezandroid.ezsaf.SAFUtil;
+import cn.ezandroid.ezpermission.PermissionCallback;
+
+//import android.os.Build;
+//import java.io.File;
+//import java.io.IOException;
+//import java.io.OutputStream;
+//import cn.ezandroid.ezsaf.EZSAF;
+//import cn.ezandroid.ezsaf.SAFCallback;
+//import cn.ezandroid.ezsaf.SAFUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -33,62 +37,60 @@ public class MainActivity extends BaseActivity {
         });
 
         $(R.id.checkPermissions).setOnClickListener(view -> {
-//            Permission storage = new Permission(Permission.STORAGE);
-//            Permission readPhoneState = new Permission(Manifest.permission.READ_PHONE_STATE);
-//            EZPermission.permissions(storage, readPhoneState)
-//                    .apply(MainActivity.this, new PermissionCallback() {
-//                        @Override
-//                        public void onPermissionGranted(Permission grantedPermission) {
-//                            Log.e("MainActivity", "onPermissionGranted:" + grantedPermission
-//                                    + " " + grantedPermission.available(MainActivity.this));
-//                        }
-//
-//                        @Override
-//                        public void onPermissionDenied(Permission deniedPermission, boolean isNoLongerPrompted) {
-//                            Log.e("MainActivity", "onPermissionDenied a:" + deniedPermission
-//                                    + " " + deniedPermission.available(MainActivity.this) + " " + isNoLongerPrompted);
-//                        }
-//
-//                        @Override
-//                        public void onAllPermissionsGranted() {
-//                            Log.e("MainActivity", "onAllPermissionsGranted");
-//                        }
-//
-//                        @Override
-//                        public void onStartSetting(Context context) {
-//                            Log.e("MainActivity", "onStartSetting");
-//                        }
-//                    });
-            testSAF();
+            Permission storage = new Permission(Permission.STORAGE);
+            Permission readPhoneState = new Permission(Manifest.permission.READ_PHONE_STATE);
+            EZPermission.permissions(storage, readPhoneState)
+                    .apply(MainActivity.this, new PermissionCallback() {
+                        @Override
+                        public void onPermissionGranted(String[] grantedPermissions) {
+                            Log.e("MainActivity", "onPermissionGranted:" + Arrays.toString(grantedPermissions));
+                        }
+
+                        @Override
+                        public void onPermissionDenied(String[] deniedPermissions, boolean isNoLongerPrompted) {
+                            Log.e("MainActivity", "onPermissionDenied:" + Arrays.toString(deniedPermissions) + " " + isNoLongerPrompted);
+                        }
+
+                        @Override
+                        public void onAllPermissionsGranted() {
+                            Log.e("MainActivity", "onAllPermissionsGranted");
+                        }
+
+                        @Override
+                        public void onStartSetting(Context context) {
+                            Log.e("MainActivity", "onStartSetting");
+                        }
+                    });
+//            testSAF();
         });
     }
-
-    private void testSAF() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            File file = new File("/storage/0123-4567/saftest3.sgf");
-            boolean canWrite = EZSAF.document(file).canWrite(this);
-            Log.e("MainActivity", "canWrite:" + canWrite);
-            EZSAF.document(file).apply(this, new SAFCallback() {
-                @Override
-                public void onSAFGranted(File file) {
-                    Log.e("MainActivity", "onSAFGranted");
-                    OutputStream outputStream = SAFUtil.getOutputStream(MainActivity.this, file);
-                    String content = "哈哈哈";
-                    byte[] data = content.getBytes();
-                    try {
-                        outputStream.write(data, 0, data.length);
-                        outputStream.flush();
-                        outputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onSAFDenied(File file) {
-                    Log.e("MainActivity", "onSAFDenied");
-                }
-            });
-        }
-    }
+//
+//    private void testSAF() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            File file = new File("/storage/0123-4567/saftest3.sgf");
+//            boolean canWrite = EZSAF.document(file).canWrite(this);
+//            Log.e("MainActivity", "canWrite:" + canWrite);
+//            EZSAF.document(file).apply(this, new SAFCallback() {
+//                @Override
+//                public void onSAFGranted(File file) {
+//                    Log.e("MainActivity", "onSAFGranted");
+//                    OutputStream outputStream = SAFUtil.getOutputStream(MainActivity.this, file);
+//                    String content = "哈哈哈";
+//                    byte[] data = content.getBytes();
+//                    try {
+//                        outputStream.write(data, 0, data.length);
+//                        outputStream.flush();
+//                        outputStream.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void onSAFDenied(File file) {
+//                    Log.e("MainActivity", "onSAFDenied");
+//                }
+//            });
+//        }
+//    }
 }

@@ -16,17 +16,17 @@ public interface PermissionCallback {
     /**
      * 权限申请成功
      *
-     * @param grantedPermission 申请成功的权限
+     * @param grantedPermissions 申请成功的权限
      */
-    default void onPermissionGranted(Permission grantedPermission) {}
+    default void onPermissionGranted(String[] grantedPermissions) {}
 
     /**
      * 权限申请失败
      *
-     * @param deniedPermission   申请失败的权限
+     * @param deniedPermissions   申请失败的权限
      * @param isNoLongerPrompted 是否不再提示
      */
-    default void onPermissionDenied(Permission deniedPermission, boolean isNoLongerPrompted) {}
+    default void onPermissionDenied(String[] deniedPermissions, boolean isNoLongerPrompted) {}
 
     /**
      * 权限列表全部申请成功

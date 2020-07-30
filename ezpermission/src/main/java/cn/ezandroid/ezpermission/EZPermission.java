@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,23 +23,27 @@ public class EZPermission {
     }
 
     public static Builder permissions(String[]... groups) {
-        List<Permission> permissions = new ArrayList<>();
+        List<String> permissions = new ArrayList<>();
         for (String[] group : groups) {
-            permissions.add(new Permission(group));
+            permissions.addAll(Arrays.asList(group));
         }
-        return new Builder(permissions.toArray(new Permission[permissions.size()]));
+        return new Builder(new Permission(permissions.toArray(new String[0])));
     }
 
     public static Builder permissions(Permission... groups) {
-        return new Builder(groups);
+        List<String> permissions = new ArrayList<>();
+        for (Permission permission : groups) {
+            permissions.addAll(Arrays.asList(permission.getPermissions()));
+        }
+        return new Builder(new Permission(permissions.toArray(new String[0])));
     }
 
     public static class Builder {
 
-        private Permission[] mPermissionGroups;
+        private Permission mPermission;
 
-        private Builder(Permission... groups) {
-            this.mPermissionGroups = groups;
+        private Builder(Permission permission) {
+            this.mPermission = permission;
         }
 
         /**
@@ -48,12 +53,7 @@ public class EZPermission {
          * @return
          */
         public boolean available(Context context) {
-            for (Permission permission : mPermissionGroups) {
-                if (!permission.available(context)) {
-                    return false;
-                }
-            }
-            return true;
+            return mPermission.available(context);
         }
 
         /**
@@ -74,32 +74,32 @@ public class EZPermission {
         public void apply(final Context context, final PermissionCallback callback) {
             PermissionCallback globalCallback = new PermissionCallback() {
                 int mGrantedCount = 0;
-                int mRemainCount = mPermissionGroups.length;
+                int mRemainCount = mPermission.getPermissions().length;
                 boolean mHasNoLongerPrompted; // 是否有勾选了不再提示并且拒绝的权限
 
                 @Override
-                public void onPermissionGranted(Permission grantedPermission) {
+                public void onPermissionGranted(String[] grantedPermissions) {
                     if (callback != null) {
-                        callback.onPermissionGranted(grantedPermission);
+                        callback.onPermissionGranted(grantedPermissions);
                     }
 
-                    mGrantedCount++;
+                    mGrantedCount += grantedPermissions.length;
 
-                    mRemainCount--;
+                    mRemainCount -= grantedPermissions.length;
                     if (mRemainCount <= 0) {
                         onAllComplete(mHasNoLongerPrompted);
                     }
                 }
 
                 @Override
-                public void onPermissionDenied(Permission deniedPermission, boolean isNoLongerPrompted) {
+                public void onPermissionDenied(String[] deniedPermissions, boolean isNoLongerPrompted) {
                     if (callback != null) {
-                        callback.onPermissionDenied(deniedPermission, isNoLongerPrompted);
+                        callback.onPermissionDenied(deniedPermissions, isNoLongerPrompted);
                     }
 
                     mHasNoLongerPrompted = mHasNoLongerPrompted || isNoLongerPrompted;
 
-                    mRemainCount--;
+                    mRemainCount -= deniedPermissions.length;
                     if (mRemainCount <= 0) {
                         onAllComplete(mHasNoLongerPrompted);
                     }
@@ -113,7 +113,7 @@ public class EZPermission {
                 }
 
                 private void onAllComplete(boolean startSetting) {
-                    if (mGrantedCount == mPermissionGroups.length) {
+                    if (mGrantedCount == mPermission.getPermissions().length) {
                         onAllPermissionsGranted();
                     } else if (startSetting) {
                         if (callback != null) {
@@ -130,9 +130,7 @@ public class EZPermission {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 globalCallback.onAllPermissionsGranted();
             } else {
-                for (Permission permission : mPermissionGroups) {
-                    permission.apply(context, globalCallback);
-                }
+                mPermission.apply(context, globalCallback);
             }
         }
     }
